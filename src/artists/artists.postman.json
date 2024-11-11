@@ -1,0 +1,136 @@
+{
+  "info": {
+    "name": "Artist API",
+    "_postman_id": "e8cd2b42-cfb6-4a2a-b6b7-f7c88e9d9a8b",
+    "description": "Collection for testing artist-related API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Artists",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:4000/api/artist",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "artist"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Artist by ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:4000/api/artist/:id",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "artist",
+            ":id"
+          ],
+          "variable": [
+            {
+              "key": "id",
+              "value": ""
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Artist",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"string\",\n    \"grammy\": true\n}"
+        },
+        "url": {
+          "raw": "http://localhost:4000/api/artist",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "artist"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Update Artist",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"string\",\n    \"grammy\": false\n}"
+        },
+        "url": {
+          "raw": "http://localhost:4000/api/artist/:id",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "artist",
+            ":id"
+          ],
+          "variable": [
+            {
+              "key": "id",
+              "value": ""
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Delete Artist",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:4000/api/artist/:id",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "artist",
+            ":id"
+          ],
+          "variable": [
+            {
+              "key": "id",
+              "value": ""
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

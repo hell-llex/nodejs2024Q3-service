@@ -1,0 +1,125 @@
+{
+  "info": {
+    "name": "Album API",
+    "_postman_id": "13f2b38a-3e9c-4b3d-b62f-2a4b3a3485c4",
+    "description": "Collection for testing album-related API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Albums",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/albums",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "albums"
+          ]
+        },
+        "description": "Получить все альбомы"
+      }
+    },
+    {
+      "name": "Get Album by ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/albums/{{albumId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "albums",
+            "{{albumId}}"
+          ]
+        },
+        "description": "Получить альбом по ID"
+      }
+    },
+    {
+      "name": "Create Album",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/albums",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "albums"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"New Album\",\n  \"artistId\": \"{{artistId}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "Создать новый альбом"
+      }
+    },
+    {
+      "name": "Update Album by ID",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "{{baseUrl}}/albums/{{albumId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "albums",
+            "{{albumId}}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Updated Album Title\",\n  \"artistId\": \"{{artistId}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "Обновить альбом по ID"
+      }
+    },
+    {
+      "name": "Delete Album by ID",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/albums/{{albumId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "albums",
+            "{{albumId}}"
+          ]
+        },
+        "description": "Удалить альбом по ID"
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4000"
+    },
+    {
+      "key": "albumId",
+      "value": ""
+    },
+    {
+      "key": "artistId",
+      "value": ""
+    }
+  ]
+}

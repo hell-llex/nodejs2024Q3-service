@@ -1,0 +1,141 @@
+{
+  "info": {
+    "name": "User API",
+    "_postman_id": "b7cd4f42-bfb6-4f2a-b4a7-c4d77e5e9519",
+    "description": "Collection for testing user-related API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Users",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:4000/api/users",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "users"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "response": []
+    },
+    {
+      "name": "Get User By ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:4000/api/users/{{userId}}",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "users",
+            "{{userId}}"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "response": []
+    },
+    {
+      "name": "Create User",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "http://localhost:4000/api/users",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "users"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"user1\",\n  \"password\": \"password123\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update User Password",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "http://localhost:4000/api/users/{{userId}}",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "users",
+            "{{userId}}"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"oldPassword\": \"password123\",\n  \"newPassword\": \"newpassword123\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete User",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:4000/api/users/{{userId}}",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "users",
+            "{{userId}}"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "response": []
+    }
+  ]
+}
