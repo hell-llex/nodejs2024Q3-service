@@ -21,16 +21,16 @@ export class UserRepository {
     return newUser;
   }
 
-  findUserById(userId: string): User | undefined {
-    return this.users.get(userId);
+  getUserById(id: string): User | undefined {
+    return this.users.get(id);
   }
 
   getAllUsers(): User[] {
     return Array.from(this.users.values());
   }
 
-  updateUser(userId: string, updatedData: Partial<User>): User | undefined {
-    const existingUser = this.users.get(userId);
+  updateUser(id: string, updatedData: Partial<User>): User | undefined {
+    const existingUser = this.users.get(id);
     if (!existingUser) return undefined;
 
     const updatedUser = {
@@ -39,11 +39,11 @@ export class UserRepository {
       version: existingUser.version + 1,
       updatedAt: Date.now(),
     };
-    this.users.set(userId, updatedUser);
+    this.users.set(id, updatedUser);
     return updatedUser;
   }
 
-  deleteUser(userId: string): boolean {
-    return this.users.delete(userId);
+  deleteUser(id: string): boolean {
+    return this.users.delete(id);
   }
 }
