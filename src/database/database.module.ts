@@ -9,13 +9,6 @@ import { FavoritesRepository } from './favorites.repository';
 @Module({
   providers: [
     {
-      provide: 'FavoritesRepository',
-      useClass: FavoritesRepository,
-    },
-    TrackRepository,
-    ArtistRepository,
-    AlbumRepository,
-    {
       provide: 'TrackRepository',
       useClass: TrackRepository,
     },
@@ -27,15 +20,30 @@ import { FavoritesRepository } from './favorites.repository';
       provide: 'ArtistRepository',
       useClass: ArtistRepository,
     },
-    FavoritesRepository,
+    {
+      provide: 'FavoritesRepository',
+      useClass: FavoritesRepository,
+    },
+    {
+      provide: 'UserRepository',
+      useClass: UserRepository,
+    },
+    // AlbumRepository,
+    // TrackRepository,
+    // ArtistRepository,
+
+    // FavoritesRepository,
   ],
   exports: [
-    AlbumRepository,
+    // TrackRepository,
+    // AlbumRepository,
+    // ArtistRepository,
+    // FavoritesRepository,
     'TrackRepository',
     'AlbumRepository',
     'ArtistRepository',
     'FavoritesRepository',
-    FavoritesRepository,
+    'UserRepository',
   ],
 })
 export class DatabaseModule {}

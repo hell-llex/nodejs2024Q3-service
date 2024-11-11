@@ -1,21 +1,11 @@
 // src/database/album.repository.ts
 
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Album } from '../album/interfaces/album.interface';
 import { v4 as uuidv4 } from 'uuid';
-import { FavoritesRepository } from './favorites.repository';
 
 @Injectable()
 export class AlbumRepository {
-  // constructor(
-  //   // @Inject('FavoritesRepository')
-  //   private readonly favoritesRepository: FavoritesRepository,
-  // ) {}
-  constructor(
-    @Inject(forwardRef(() => FavoritesRepository))
-    private readonly favoritesRepository: FavoritesRepository,
-  ) {}
-
   private albums: Map<string, Album> = new Map();
 
   createAlbum(name: string, artistId: string, year: number): Album {
@@ -50,7 +40,6 @@ export class AlbumRepository {
   }
 
   deleteAlbum(id: string): boolean {
-    this.favoritesRepository.deleteAlbumFromFavorites(id);
     return this.albums.delete(id);
   }
 }
