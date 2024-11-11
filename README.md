@@ -1,72 +1,111 @@
-# Home Library Service
 
-## Prerequisites
+# Node.js 2024 Q3 Service
 
-- Git - [Download & Install Git](https://git-scm.com/downloads).
-- Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+## Getting Started
 
-## Downloading
+This guide will help you set up and run the project locally.
 
-```
-git clone {repository URL}
-```
+### Prerequisites
 
-## Installing NPM modules
+- **Git** - [Download & Install Git](https://git-scm.com/downloads)
+- **Node.js** - [Download & Install Node.js](https://nodejs.org/en/download/) (includes npm)
 
-```
-npm install
-```
+### Installation
 
-## Running application
+1. **Clone the repository**
 
-```
-npm start
-```
+   ```bash
+   git clone https://github.com/hell-llex/nodejs2024Q3-service.git
+   ```
 
-After starting the app on port (4000 as default) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
+2. **Install dependencies**
 
-## Testing
+   ```bash
+   npm install
+   ```
 
-After application running open new terminal and enter:
+3. **Start the application**
 
-To run all tests without authorization
+   ```bash
+   npm start
+   ```
 
-```
+   By default, the server will start on port 4000. You can access the OpenAPI documentation at [http://localhost:4000/doc/](http://localhost:4000/doc/).
+
+### Testing
+
+> **Note**: Make sure the application is running by executing `npm start` before running any tests to ensure they work correctly.
+
+The project includes comprehensive test suites for:
+
+- Users
+- Artists
+- Albums
+- Tracks
+- Favorites
+
+To run all tests:
+
+```bash
 npm run test
 ```
 
-To run only one of all test suites
+#### Available Test Suites
 
-```
-npm run test -- <path to suite>
-```
+You can run specific test suites individually:
 
-To run all test with authorization
+- **Users tests:**
 
-```
-npm run test:auth
-```
+  ```bash
+  npm run test -- test/auth/users.e2e.spec.ts
+  ```
 
-To run only specific test suite with authorization
+- **Artists tests:**
 
-```
-npm run test:auth -- <path to suite>
-```
+  ```bash
+  npm run test -- test/auth/artists.e2e.spec.ts
+  ```
 
-### Auto-fix and format
+- **Albums tests:**
 
-```
-npm run lint
-```
+  ```bash
+  npm run test -- test/auth/albums.e2e.spec.ts
+  ```
 
-```
-npm run format
-```
+- **Tracks tests:**
 
-### Debugging in VSCode
+  ```bash
+  npm run test -- test/auth/tracks.e2e.spec.ts
+  ```
 
-Press <kbd>F5</kbd> to debug.
+- **Favorites tests:**
 
-For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+  ```bash
+  npm run test -- test/auth/favorites.e2e.spec.ts
+  ```
+
+### Development Tools
+
+- **Format code:**
+
+  ```bash
+  npm run format
+  ```
+
+- **Lint code:**
+
+  ```bash
+  npm run lint
+  ```
+
+## API Documentation
+
+After starting the application, you can explore the full API documentation at [http://localhost:4000/doc/](http://localhost:4000/doc/).
+
+The API includes endpoints for managing:
+
+- User
+- Artists
+- Albums
+- Tracks
+- Favorites
