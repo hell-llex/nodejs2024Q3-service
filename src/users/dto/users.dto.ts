@@ -28,7 +28,7 @@ export class UserResponseDto {
     this.version = user.version;
     this.createdAt = user.createdAt;
     this.updatedAt = user.updatedAt;
-    this.password = user.password;
+    // this.password = user.password;
   }
 }
 
@@ -40,4 +40,14 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   password: string;
+}
+
+export class UpdateUserDto {
+  @IsString()
+  @IsNotEmpty()
+  oldPassword: string;
+
+  @IsString()
+  @IsNotEmpty()
+  newPassword: string;
 }

@@ -7,7 +7,7 @@ import { UserRepository } from '../database/user.repository';
 @Injectable()
 export class UsersService {
   constructor(
-    // @Inject('UserRepository')
+    @Inject('UserRepository')
     private readonly userRepository: UserRepository,
   ) {}
 

@@ -16,8 +16,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UpdatePasswordDto } from './interfaces/user.interface';
-import { CreateUserDto, UserResponseDto } from './dto/users.dto';
+import { CreateUserDto, UpdateUserDto, UserResponseDto } from './dto/users.dto';
 
 @Controller('user')
 export class UsersController {
@@ -64,7 +63,7 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   updateUser(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Body() updatePasswordDto: UpdatePasswordDto,
+    @Body() updatePasswordDto: UpdateUserDto,
   ): UserResponseDto {
     const { oldPassword, newPassword } = updatePasswordDto;
     const user = this.usersService.getUserById(id);
