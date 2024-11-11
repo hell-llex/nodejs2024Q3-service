@@ -1,0 +1,118 @@
+{
+  "info": {
+    "name": "Track API",
+    "_postman_id": "f6e5a8a2-6fcd-4a4b-8a2e-7c5d3ef8cdbf",
+    "description": "Collection for testing track-related API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Tracks",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/track",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "track"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Track by ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/track/{{trackId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "track",
+            "{{trackId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Track",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/track",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "track"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"New Track\",\n    \"artistId\": null,\n    \"albumId\": null,\n    \"duration\": 180\n}"
+        }
+      }
+    },
+    {
+      "name": "Update Track",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "{{baseUrl}}/track/{{trackId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "track",
+            "{{trackId}}"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Updated Track Name\",\n    \"artistId\": \"some-artist-id\",\n    \"albumId\": \"some-album-id\",\n    \"duration\": 200\n}"
+        }
+      }
+    },
+    {
+      "name": "Delete Track",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/track/{{trackId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "track",
+            "{{trackId}}"
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4000/api"
+    },
+    {
+      "key": "trackId",
+      "value": ""
+    }
+  ]
+}
