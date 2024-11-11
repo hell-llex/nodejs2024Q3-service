@@ -1,0 +1,118 @@
+{
+  "info": {
+    "name": "Album API",
+    "_postman_id": "f6e5a8a2-6fcd-4a4b-8a2e-7c5d3ef8cdbf",
+    "description": "Collection for testing album-related API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Albums",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/album",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "album"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Album by ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/album/{{albumId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "album",
+            "{{albumId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Album",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/album",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "album"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"New Album\",\n    \"artistId\": null,\n    \"albumId\": null,\n    \"duration\": 180\n}"
+        }
+      }
+    },
+    {
+      "name": "Update Album",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "{{baseUrl}}/album/{{albumId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "album",
+            "{{albumId}}"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Updated Album Name\",\n    \"artistId\": \"some-artist-id\",\n    \"albumId\": \"some-album-id\",\n    \"duration\": 200\n}"
+        }
+      }
+    },
+    {
+      "name": "Delete Album",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/album/{{albumId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "album",
+            "{{albumId}}"
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4000/api"
+    },
+    {
+      "key": "albumId",
+      "value": ""
+    }
+  ]
+}
