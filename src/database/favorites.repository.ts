@@ -59,20 +59,20 @@ export class FavoritesRepository {
     return this.albumRepository.getAlbumById(id);
   }
 
-  updateArtistFavorites(artistId: string): string {
+  updateArtistFavorites(artistId: string): { message: string } {
     if (!this.favorites.artists.includes(artistId)) {
       this.favorites.artists.push(artistId);
-      return 'Artist successfully added to favorites';
+      return { message: 'Artist successfully added to favorites' };
     }
-    return 'Artist was already in favorites';
+    return { message: 'Artist was already in favorites' };
   }
 
-  updateAlbumFavorites(albumId: string): string {
+  updateAlbumFavorites(albumId: string): { message: string } {
     if (!this.favorites.albums.includes(albumId)) {
       this.favorites.albums.push(albumId);
-      return 'Album successfully added to favorites';
+      return { message: 'Album successfully added to favorites' };
     }
-    return 'Album was already in favorites';
+    return { message: 'Album was already in favorites' };
   }
 
   updateTrackFavorites(trackId: string): { message: string } {

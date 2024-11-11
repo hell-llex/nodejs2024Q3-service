@@ -9,28 +9,14 @@ import {
   HttpCode,
   HttpStatus,
   ParseUUIDPipe,
-  NotFoundException,
   BadRequestException,
-  Inject,
 } from '@nestjs/common';
 import { FavoritesService } from './favorites.service';
 import { ResponseFavorites } from './interfaces/favorites.interface';
 
-import { TrackService } from '../track/track.service';
-import { AlbumService } from '../album/album.service';
-import { ArtistsService } from '../artists/artists.service';
-
 @Controller('favs')
 export class FavoritesController {
-  constructor(
-    private readonly favoritesService: FavoritesService,
-    // @Inject('TrackService')
-    private readonly trackService: TrackService,
-    // @Inject('ArtistsService')
-    private readonly artistsService: ArtistsService,
-    // @Inject('AlbumService')
-    private readonly albumService: AlbumService,
-  ) {}
+  constructor(private readonly favoritesService: FavoritesService) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -50,10 +36,6 @@ export class FavoritesController {
     )
     id: string,
   ): { message: string } {
-    const track = this.trackService.getTrackById(id);
-    if (!track) {
-      throw new NotFoundException(`Favorites with id ${id} not found`);
-    }
     return this.favoritesService.updateTrackFavorites(id);
   }
 
@@ -69,10 +51,6 @@ export class FavoritesController {
     )
     id: string,
   ): void {
-    const track = this.trackService.getTrackById(id);
-    if (!track) {
-      throw new NotFoundException(`Favorites with id ${id} not found`);
-    }
     this.favoritesService.deleteTrackFromFavorites(id);
   }
 
@@ -87,11 +65,7 @@ export class FavoritesController {
       }),
     )
     id: string,
-  ): string {
-    const artist = this.artistsService.getArtistById(id);
-    if (!artist) {
-      throw new NotFoundException(`Favorites with id ${id} not found`);
-    }
+  ): { message: string } {
     return this.favoritesService.updateArtistFavorites(id);
   }
 
@@ -107,10 +81,6 @@ export class FavoritesController {
     )
     id: string,
   ): void {
-    const artist = this.artistsService.getArtistById(id);
-    if (!artist) {
-      throw new NotFoundException(`Favorites with id ${id} not found`);
-    }
     this.favoritesService.deleteArtistFromFavorites(id);
   }
 
@@ -125,11 +95,7 @@ export class FavoritesController {
       }),
     )
     id: string,
-  ): string {
-    const album = this.albumService.getAlbumById(id);
-    if (!album) {
-      throw new NotFoundException(`Favorites with id ${id} not found`);
-    }
+  ): { message: string } {
     return this.favoritesService.updateAlbumFavorites(id);
   }
 
@@ -145,10 +111,6 @@ export class FavoritesController {
     )
     id: string,
   ): void {
-    const album = this.albumService.getAlbumById(id);
-    if (!album) {
-      throw new NotFoundException(`Favorites with id ${id} not found`);
-    }
     this.favoritesService.deleteAlbumFromFavorites(id);
   }
 }
