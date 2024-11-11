@@ -40,6 +40,10 @@ export class TrackController {
     )
     id: string,
   ): Track {
+    const track = this.trackService.getTrackById(id);
+    if (!track) {
+      throw new NotFoundException(`Track with id ${id} not found`);
+    }
     return this.trackService.getTrackById(id);
   }
 
@@ -55,8 +59,8 @@ export class TrackController {
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updateTrackDto: UpdateTrackDto,
   ) {
-    const user = this.trackService.getTrackById(id);
-    if (!user) {
+    const track = this.trackService.getTrackById(id);
+    if (!track) {
       throw new NotFoundException(`Track with id ${id} not found`);
     }
     return this.trackService.updateTrack(id, updateTrackDto);
