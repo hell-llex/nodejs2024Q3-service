@@ -3,12 +3,21 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Artist } from './interfaces/artist.interface';
 import { ArtistRepository } from '../database/artist.repository';
+import { AlbumRepository } from '../database/album.repository';
+import { FavoritesRepository } from '../database/favorites.repository';
+import { TrackRepository } from '../database/track.repository';
 
 @Injectable()
 export class ArtistsService {
   constructor(
-    // @Inject('ArtistRepository')
+    @Inject('ArtistRepository')
     private readonly artistRepository: ArtistRepository,
+    @Inject('FavoritesRepository')
+    private readonly favoritesRepository: FavoritesRepository,
+    @Inject('TrackRepository')
+    private readonly trackRepository: TrackRepository,
+    @Inject('AlbumRepository')
+    private readonly albumRepository: AlbumRepository,
   ) {}
 
   getAllArtists(): Artist[] {
@@ -28,6 +37,17 @@ export class ArtistsService {
   }
 
   deleteArtist(id: string): boolean {
+    this.favoritesRepository.deleteArtistFromFavorites(id);
+    this.albumRepository.getAllAlbum().forEach((album) => {
+      if (album.artistId && album.artistId === id) {
+        this.albumRepository.updateAlbum(album.id, { artistId: null });
+      }
+    });
+    this.trackRepository.getAllTrack().forEach((track) => {
+      if (track.artistId && track.artistId === id) {
+        this.trackRepository.updateTrack(track.id, { artistId: null });
+      }
+    });
     return this.artistRepository.deleteArtist(id);
   }
 }

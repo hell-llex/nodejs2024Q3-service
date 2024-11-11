@@ -40,6 +40,10 @@ export class ArtistsController {
     )
     id: string,
   ): Artist {
+    const artist = this.artistsService.getArtistById(id);
+    if (!artist) {
+      throw new NotFoundException(`Artists with id ${id} not found`);
+    }
     return this.artistsService.getArtistById(id);
   }
 
@@ -57,8 +61,8 @@ export class ArtistsController {
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updateArtistDto: UpdateArtistDto,
   ) {
-    const user = this.artistsService.getArtistById(id);
-    if (!user) {
+    const artist = this.artistsService.getArtistById(id);
+    if (!artist) {
       throw new NotFoundException(`Artists with id ${id} not found`);
     }
     return this.artistsService.updateArtist(id, updateArtistDto);
