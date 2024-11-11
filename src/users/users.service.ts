@@ -1,12 +1,15 @@
 // src/users/users.service.ts
 
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { User } from './interfaces/user.interface';
 import { UserRepository } from '../database/user.repository';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    // @Inject('UserRepository')
+    private readonly userRepository: UserRepository,
+  ) {}
 
   getAllUsers(): User[] {
     return this.userRepository.getAllUsers();
@@ -16,15 +19,15 @@ export class UsersService {
     return this.userRepository.createUser(login, password);
   }
 
-  findUserById(userId: string): User | undefined {
-    return this.userRepository.findUserById(userId);
+  getUserById(id: string): User | undefined {
+    return this.userRepository.getUserById(id);
   }
 
-  updateUser(userId: string, updatedData: Partial<User>): User | undefined {
-    return this.userRepository.updateUser(userId, updatedData);
+  updateUser(id: string, updatedData: Partial<User>): User | undefined {
+    return this.userRepository.updateUser(id, updatedData);
   }
 
-  deleteUser(userId: string): boolean {
-    return this.userRepository.deleteUser(userId);
+  deleteUser(id: string): boolean {
+    return this.userRepository.deleteUser(id);
   }
 }

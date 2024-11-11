@@ -19,7 +19,7 @@ import { UsersService } from './users.service';
 import { UpdatePasswordDto } from './interfaces/user.interface';
 import { CreateUserDto, UserResponseDto } from './dto/users.dto';
 
-@Controller('users')
+@Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -33,19 +33,19 @@ export class UsersController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  findUserById(
+  getUserById(
     @Param(
       'id',
       new ParseUUIDPipe({
         exceptionFactory: () =>
-          new BadRequestException('Invalid UUID format for userId'),
+          new BadRequestException('Invalid UUID format for id'),
       }),
     )
-    userId: string,
+    id: string,
   ): UserResponseDto {
-    const user = this.usersService.findUserById(userId);
+    const user = this.usersService.getUserById(id);
     if (!user) {
-      throw new NotFoundException(`User with id ${userId} not found`);
+      throw new NotFoundException(`User with id ${id} not found`);
     }
     return new UserResponseDto(user);
   }
@@ -63,18 +63,18 @@ export class UsersController {
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   updateUser(
-    @Param('id', new ParseUUIDPipe()) userId: string,
+    @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
   ): UserResponseDto {
     const { oldPassword, newPassword } = updatePasswordDto;
-    const user = this.usersService.findUserById(userId);
+    const user = this.usersService.getUserById(id);
     if (!user) {
-      throw new NotFoundException(`User with id ${userId} not found`);
+      throw new NotFoundException(`User with id ${id} not found`);
     }
     if (user.password !== oldPassword) {
       throw new ForbiddenException('Incorrect old password');
     }
-    const updatedUser = this.usersService.updateUser(userId, {
+    const updatedUser = this.usersService.updateUser(id, {
       password: newPassword,
     });
     return new UserResponseDto(updatedUser);
@@ -87,15 +87,15 @@ export class UsersController {
       'id',
       new ParseUUIDPipe({
         exceptionFactory: () =>
-          new BadRequestException('Invalid UUID format for userId'),
+          new BadRequestException('Invalid UUID format for id'),
       }),
     )
-    userId: string,
+    id: string,
   ): void {
-    const user = this.usersService.findUserById(userId);
+    const user = this.usersService.getUserById(id);
     if (!user) {
-      throw new NotFoundException(`User with id ${userId} not found`);
+      throw new NotFoundException(`User with id ${id} not found`);
     }
-    this.usersService.deleteUser(userId);
+    this.usersService.deleteUser(id);
   }
 }

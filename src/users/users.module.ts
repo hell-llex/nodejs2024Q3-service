@@ -6,16 +6,18 @@ import { ClassSerializerInterceptor } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { DatabaseModule } from '../database/database.module';
+import { UserRepository } from '../database/user.repository';
 
 @Module({
   imports: [DatabaseModule],
+  controllers: [UsersController],
   providers: [
     UsersService,
+    UserRepository,
     {
-      provide: APP_INTERCEPTOR,
-      useClass: ClassSerializerInterceptor,
+      provide: 'UserRepository',
+      useClass: UserRepository,
     },
   ],
-  controllers: [UsersController],
 })
 export class UsersModule {}
