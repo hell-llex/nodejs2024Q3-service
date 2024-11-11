@@ -40,6 +40,10 @@ export class AlbumController {
     )
     id: string,
   ): Album {
+    const album = this.albumService.getAlbumById(id);
+    if (!album) {
+      throw new NotFoundException(`Album with id ${id} not found`);
+    }
     return this.albumService.getAlbumById(id);
   }
 
@@ -55,8 +59,8 @@ export class AlbumController {
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updateAlbumDto: UpdateAlbumDto,
   ) {
-    const user = this.albumService.getAlbumById(id);
-    if (!user) {
+    const album = this.albumService.getAlbumById(id);
+    if (!album) {
       throw new NotFoundException(`Album with id ${id} not found`);
     }
     return this.albumService.updateAlbum(id, updateAlbumDto);

@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Album API",
-    "_postman_id": "f6e5a8a2-6fcd-4a4b-8a2e-7c5d3ef8cdbf",
+    "_postman_id": "13f2b38a-3e9c-4b3d-b62f-2a4b3a3485c4",
     "description": "Collection for testing album-related API endpoints",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
@@ -11,14 +11,15 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/album",
+          "raw": "{{baseUrl}}/albums",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
-            "album"
+            "albums"
           ]
-        }
+        },
+        "description": "Получить все альбомы"
       }
     },
     {
@@ -26,15 +27,16 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/album/{{albumId}}",
+          "raw": "{{baseUrl}}/albums/{{albumId}}",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
-            "album",
+            "albums",
             "{{albumId}}"
           ]
-        }
+        },
+        "description": "Получить альбом по ID"
       }
     },
     {
@@ -42,76 +44,81 @@
       "request": {
         "method": "POST",
         "url": {
-          "raw": "{{baseUrl}}/album",
+          "raw": "{{baseUrl}}/albums",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
-            "album"
+            "albums"
           ]
         },
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"name\": \"New Album\",\n    \"artistId\": null,\n    \"albumId\": null,\n    \"duration\": 180\n}"
-        }
+          "raw": "{\n  \"title\": \"New Album\",\n  \"artistId\": \"{{artistId}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "Создать новый альбом"
       }
     },
     {
-      "name": "Update Album",
+      "name": "Update Album by ID",
       "request": {
         "method": "PUT",
         "url": {
-          "raw": "{{baseUrl}}/album/{{albumId}}",
+          "raw": "{{baseUrl}}/albums/{{albumId}}",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
-            "album",
+            "albums",
             "{{albumId}}"
           ]
         },
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"name\": \"Updated Album Name\",\n    \"artistId\": \"some-artist-id\",\n    \"albumId\": \"some-album-id\",\n    \"duration\": 200\n}"
-        }
+          "raw": "{\n  \"title\": \"Updated Album Title\",\n  \"artistId\": \"{{artistId}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "Обновить альбом по ID"
       }
     },
     {
-      "name": "Delete Album",
+      "name": "Delete Album by ID",
       "request": {
         "method": "DELETE",
         "url": {
-          "raw": "{{baseUrl}}/album/{{albumId}}",
+          "raw": "{{baseUrl}}/albums/{{albumId}}",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
-            "album",
+            "albums",
             "{{albumId}}"
           ]
-        }
+        },
+        "description": "Удалить альбом по ID"
       }
     }
   ],
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:4000/api"
+      "value": "http://localhost:4000"
     },
     {
       "key": "albumId",
+      "value": ""
+    },
+    {
+      "key": "artistId",
       "value": ""
     }
   ]
