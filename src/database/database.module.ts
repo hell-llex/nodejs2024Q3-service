@@ -4,10 +4,12 @@ import { ArtistRepository } from './artist.repository';
 import { TrackRepository } from './track.repository';
 import { AlbumRepository } from './album.repository';
 import { FavoritesRepository } from './favorites.repository';
+import { PrismaService } from './prisma.service';
 
 @Global()
 @Module({
   providers: [
+    PrismaService,
     {
       provide: 'TrackRepository',
       useClass: TrackRepository,
@@ -35,6 +37,7 @@ import { FavoritesRepository } from './favorites.repository';
     // FavoritesRepository,
   ],
   exports: [
+    PrismaService,
     // TrackRepository,
     // AlbumRepository,
     // ArtistRepository,

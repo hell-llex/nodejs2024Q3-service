@@ -24,15 +24,15 @@ export class UsersController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  getAllUsers(): UserResponseDto[] {
-    return this.usersService
-      .getAllUsers()
-      .map((user) => new UserResponseDto(user));
+  async getAllUsers(): Promise<UserResponseDto[]> {
+    return (await this.usersService.getAllUsers()).map(
+      (user) => new UserResponseDto(user),
+    );
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  getUserById(
+  async getUserById(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -41,8 +41,8 @@ export class UsersController {
       }),
     )
     id: string,
-  ): UserResponseDto {
-    const user = this.usersService.getUserById(id);
+  ): Promise<UserResponseDto> {
+    const user = await this.usersService.getUserById(id);
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
@@ -55,25 +55,25 @@ export class UsersController {
     @Body() createUserDto: CreateUserDto,
   ): Promise<UserResponseDto> {
     const { password, login } = createUserDto;
-    const newUser = this.usersService.createUser(login, password);
+    const newUser = await this.usersService.createUser(login, password);
     return new UserResponseDto(newUser);
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  updateUser(
+  async updateUser(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updatePasswordDto: UpdateUserDto,
-  ): UserResponseDto {
+  ): Promise<UserResponseDto> {
     const { oldPassword, newPassword } = updatePasswordDto;
-    const user = this.usersService.getUserById(id);
+    const user = await this.usersService.getUserById(id);
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
     if (user.password !== oldPassword) {
       throw new ForbiddenException('Incorrect old password');
     }
-    const updatedUser = this.usersService.updateUser(id, {
+    const updatedUser = await this.usersService.updateUser(id, {
       password: newPassword,
     });
     return new UserResponseDto(updatedUser);

@@ -11,23 +11,26 @@ export class UsersService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  getAllUsers(): User[] {
-    return this.userRepository.getAllUsers();
+  async getAllUsers(): Promise<User[]> {
+    return await this.userRepository.getAllUsers();
   }
 
-  createUser(login: string, password: string): User {
-    return this.userRepository.createUser(login, password);
+  async createUser(login: string, password: string): Promise<User> {
+    return await this.userRepository.createUser(login, password);
   }
 
-  getUserById(id: string): User | undefined {
-    return this.userRepository.getUserById(id);
+  async getUserById(id: string): Promise<User | undefined> {
+    return await this.userRepository.getUserById(id);
   }
 
-  updateUser(id: string, updatedData: Partial<User>): User | undefined {
-    return this.userRepository.updateUser(id, updatedData);
+  async updateUser(
+    id: string,
+    updatedData: Partial<User>,
+  ): Promise<User | undefined> {
+    return await this.userRepository.updateUser(id, updatedData);
   }
 
-  deleteUser(id: string): boolean {
-    return this.userRepository.deleteUser(id);
+  async deleteUser(id: string): Promise<boolean> {
+    return await this.userRepository.deleteUser(id);
   }
 }
