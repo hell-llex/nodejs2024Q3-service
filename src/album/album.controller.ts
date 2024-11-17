@@ -1,5 +1,3 @@
-// src/album/album.controller.ts
-
 import {
   Controller,
   Post,
@@ -24,13 +22,13 @@ export class AlbumController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  getAllAlbum() {
-    return this.albumService.getAllAlbum();
+  async getAllAlbum() {
+    return await this.albumService.getAllAlbum();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  getAlbumById(
+  async getAlbumById(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -39,36 +37,36 @@ export class AlbumController {
       }),
     )
     id: string,
-  ): Album {
-    const album = this.albumService.getAlbumById(id);
+  ): Promise<Album> {
+    const album = await this.albumService.getAlbumById(id);
     if (!album) {
       throw new NotFoundException(`Album with id ${id} not found`);
     }
-    return this.albumService.getAlbumById(id);
+    return await this.albumService.getAlbumById(id);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createAlbum(@Body() createAlbumDto: CreateAlbumDto): Promise<Album> {
     const { name, artistId, year } = createAlbumDto;
-    return this.albumService.createAlbum(name, artistId, year);
+    return await this.albumService.createAlbum(name, artistId, year);
   }
 
   @Put(':id')
-  updateAlbum(
+  async updateAlbum(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updateAlbumDto: UpdateAlbumDto,
   ) {
-    const album = this.albumService.getAlbumById(id);
+    const album = await this.albumService.getAlbumById(id);
     if (!album) {
       throw new NotFoundException(`Album with id ${id} not found`);
     }
-    return this.albumService.updateAlbum(id, updateAlbumDto);
+    return await this.albumService.updateAlbum(id, updateAlbumDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteAlbum(
+  async deleteAlbum(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -77,11 +75,11 @@ export class AlbumController {
       }),
     )
     id: string,
-  ): void {
-    const album = this.albumService.getAlbumById(id);
+  ): Promise<void> {
+    const album = await this.albumService.getAlbumById(id);
     if (!album) {
       throw new NotFoundException(`Album with id ${id} not found`);
     }
-    this.albumService.deleteAlbum(id);
+    await this.albumService.deleteAlbum(id);
   }
 }

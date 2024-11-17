@@ -1,5 +1,3 @@
-// src/albums/albums.service.ts
-
 import { Inject, Injectable } from '@nestjs/common';
 import { Album } from './interfaces/album.interface';
 import { AlbumRepository } from '../database/album.repository';
@@ -17,36 +15,37 @@ export class AlbumService {
     private readonly albumRepository: AlbumRepository,
   ) {}
 
-  getAllAlbum(): Album[] {
-    return this.albumRepository.getAllAlbum();
+  async getAllAlbum(): Promise<Album[]> {
+    return await this.albumRepository.getAllAlbum();
   }
 
-  createAlbum(name: string, artistId: string, year: number): Album {
-    return this.albumRepository.createAlbum(name, artistId, year);
+  async createAlbum(
+    name: string,
+    artistId: string,
+    year: number,
+  ): Promise<Album> {
+    return await this.albumRepository.createAlbum(name, artistId, year);
   }
 
-  getAlbumById(id: string): Album | undefined {
-    return this.albumRepository.getAlbumById(id);
+  async getAlbumById(id: string): Promise<Album | undefined> {
+    return await this.albumRepository.getAlbumById(id);
   }
 
-  updateAlbum(id: string, updatedData: Partial<Album>): Album | undefined {
-    return this.albumRepository.updateAlbum(id, updatedData);
+  async updateAlbum(
+    id: string,
+    updatedData: Partial<Album>,
+  ): Promise<Album | undefined> {
+    return await this.albumRepository.updateAlbum(id, updatedData);
   }
 
-  deleteAlbum(id: string): boolean {
-    // console.log('id :>> ', id);
-    this.favoritesRepository.deleteAlbumFromFavorites(id);
-
-    // console.log('TrackRepository instance:', this.trackRepository);
-
-    const tracks = this.trackRepository.getAllTrack();
-    tracks.forEach((track) => {
+  async deleteAlbum(id: string): Promise<boolean> {
+    await this.favoritesRepository.deleteAlbumFromFavorites(id);
+    const tracks = await this.trackRepository.getAllTrack();
+    tracks.forEach(async (track) => {
       if (track.albumId && track.albumId === id) {
-        // console.log('track 1:>> ', track);
-        this.trackRepository.updateTrack(track.id, { albumId: null });
-        // console.log('track 2:>> ', track);
+        await this.trackRepository.updateTrack(track.id, { albumId: null });
       }
     });
-    return this.albumRepository.deleteAlbum(id);
+    return await this.albumRepository.deleteAlbum(id);
   }
 }

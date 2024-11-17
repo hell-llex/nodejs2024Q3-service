@@ -24,8 +24,8 @@ export class FavoritesService {
     private readonly albumRepository: AlbumRepository,
   ) {}
 
-  getAllFavorites(): ResponseFavorites {
-    return this.favoritesRepository.getAllFavorites();
+  async getAllFavorites(): Promise<ResponseFavorites> {
+    return await this.favoritesRepository.getAllFavorites();
   }
 
   updateTrackFavorites(id: string): { message: string } {

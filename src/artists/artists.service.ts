@@ -36,9 +36,9 @@ export class ArtistsService {
     return this.artistRepository.updateArtist(id, updatedData);
   }
 
-  deleteArtist(id: string): boolean {
+  async deleteArtist(id: string): Promise<boolean> {
     this.favoritesRepository.deleteArtistFromFavorites(id);
-    this.albumRepository.getAllAlbum().forEach((album) => {
+    (await this.albumRepository.getAllAlbum()).forEach((album) => {
       if (album.artistId && album.artistId === id) {
         this.albumRepository.updateAlbum(album.id, { artistId: null });
       }

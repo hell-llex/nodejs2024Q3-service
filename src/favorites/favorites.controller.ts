@@ -20,8 +20,8 @@ export class FavoritesController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  getAllFavorites(): ResponseFavorites {
-    return this.favoritesService.getAllFavorites();
+  async getAllFavorites(): Promise<ResponseFavorites> {
+    return await this.favoritesService.getAllFavorites();
   }
 
   @Post('track/:id')

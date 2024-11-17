@@ -35,14 +35,14 @@ export class FavoritesRepository {
     tracks: [],
   };
 
-  getAllFavorites(): ResponseFavorites {
+  async getAllFavorites(): Promise<ResponseFavorites> {
     const artists = this.favorites.artists
       .map((id) => this.artistRepository.getArtistById(id))
       .filter((artist) => artist !== undefined) as Artist[];
 
-    const albums = this.favorites.albums
+    const albums = (await this.favorites.albums)
       .map((id) => this.albumRepository.getAlbumById(id))
-      .filter((album) => album !== undefined) as Album[];
+      .filter((album) => album !== undefined) as unknown as Album[];
 
     const tracks = this.favorites.tracks
       .map((id) => this.trackRepository.getTrackById(id))
@@ -55,8 +55,8 @@ export class FavoritesRepository {
     };
   }
 
-  getAlbumById(id: string): Album | undefined {
-    return this.albumRepository.getAlbumById(id);
+  async getAlbumById(id: string): Promise<Album | undefined> {
+    return await this.albumRepository.getAlbumById(id);
   }
 
   updateArtistFavorites(artistId: string): { message: string } {
