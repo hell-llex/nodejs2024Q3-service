@@ -109,3 +109,50 @@ The API includes endpoints for managing:
 - Albums
 - Tracks
 - Favorites
+
+
+# Инструкция по запуску проекта
+
+## 1. Клонируем репозиторий:
+```bash
+git clone https://github.com/hell-llex/nodejs2024Q3-service.git
+```
+
+## 2. Переходим в директорию проекта:
+```bash
+cd nodejs2024Q3-service
+```
+
+## 3. Устанавливаем зависимости:
+```bash
+npm install
+```
+
+## 4. Создаем `.env` файл с настройками:
+```env
+DATABASE_URL="postgresql://user:password@postgres:5432/home-library?schema=public"
+POSTGRES_USER=user
+POSTGRES_PASSWORD=password
+POSTGRES_DB=home-library
+```
+
+## 5. Запускаем Docker-контейнеры:
+```bash
+docker-compose up -d
+```
+
+## 6. Создаем и применяем миграции:
+```bash
+npx prisma migrate dev --name init
+```
+
+## 7. Генерируем Prisma-клиент:
+```bash
+npx prisma generate
+```
+
+---
+
+## Готово! 
+Приложение доступно по адресу: [http://localhost:4000/doc](http://localhost:4000/doc)
+```
