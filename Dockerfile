@@ -1,3 +1,5 @@
+# Dockerfile для приложения
+
 # Базовый образ для разработки
 FROM node:18-alpine
 
@@ -14,6 +16,7 @@ RUN npm ci
 COPY . .
 
 # Генерация Prisma Client
+COPY prisma ./prisma/
 RUN npx prisma generate
 
 # Экспонируем порт
