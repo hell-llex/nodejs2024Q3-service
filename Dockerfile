@@ -1,26 +1,23 @@
-FROM node:18-alpine AS builder
-
-WORKDIR /app
-
-RUN apk add --no-cache python3 build-base
-
-COPY package*.json ./
-RUN npm ci
-
-COPY . .
-RUN npm run build
-
+# Базовый образ для разработки
 FROM node:18-alpine
 
 WORKDIR /app
 
+# Установка необходимых инструментов
 RUN apk add --no-cache python3 build-base
 
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/doc ./doc 
+# Установка зависимостей
 COPY package*.json ./
+RUN npm ci
 
+# Копируем исходный код
+COPY . .
+
+# Генерация Prisma Client
+RUN npx prisma generate
+
+# Экспонируем порт
 EXPOSE 4000
 
+# Команда для запуска
 CMD ["npm", "run", "start:dev"]

@@ -1,38 +1,46 @@
-version: '3.8'
+# version: '3.8'
+networks:
+  app-network:
+    driver: bridge
 
 services:
   app:
+    container_name: app
     build: .
     ports:
-      - "4000:4000"
-    environment:
-      - DATABASE_URL=${DATABASE_URL}
+      - 4000:4000
     volumes:
+      - ./prisma:/app/prisma
       - ./src:/app/src
-      - ./doc:/app/doc
+      - ./package.json:/app/package.json
+      - ./package-lock.json:/app/package-lock.json
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./tsconfig.build.json:/app/tsconfig.build.json
+      - /app/node_modules
+    environment:
+      # - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_URL=postgresql://user:password@postgres:5432/home-library?schema=public
+    command: npm run start:dev
     depends_on:
       - postgres
-    restart: always
     networks:
       - app-network
+    restart: always
 
   postgres:
     image: postgres:15-alpine
+    container_name: postgres
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
     ports:
-      - "5432:5432"
+      - 5432:5432
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     networks:
       - app-network
     restart: always
 
-networks:
-  app-network:
-    driver: bridge
-
 volumes:
-  postgres-data:
+  pgdata:
