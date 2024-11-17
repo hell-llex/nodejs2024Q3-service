@@ -8,11 +8,15 @@ export class UserRepository {
   constructor(private prisma: PrismaService) {}
 
   async getAllUsers(): Promise<User[]> {
-    return this.prisma.user.findMany();
+    return (await this.prisma.user.findMany()).map((user) => ({
+      ...user,
+      createdAt: Number(user.createdAt),
+      updatedAt: Number(user.updatedAt),
+    }));
   }
 
   async createUser(login: string, password: string): Promise<User> {
-    return this.prisma.user.create({
+    const user = await this.prisma.user.create({
       data: {
         id: uuidv4(),
         login,
@@ -22,18 +26,30 @@ export class UserRepository {
         updatedAt: Date.now(),
       },
     });
+
+    return {
+      ...user,
+      createdAt: Number(user.createdAt),
+      updatedAt: Number(user.updatedAt),
+    };
   }
 
   async getUserById(id: string): Promise<User | null> {
-    return this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id },
     });
+    if (user === null) return null;
+    return {
+      ...user,
+      createdAt: Number(user.createdAt),
+      updatedAt: Number(user.updatedAt),
+    };
   }
 
   async updateUser(id: string, data: Partial<User>): Promise<User> {
     const user = await this.prisma.user.findUnique({ where: { id } });
 
-    return this.prisma.user.update({
+    const newUser = await this.prisma.user.update({
       where: { id },
       data: {
         ...data,
@@ -41,6 +57,12 @@ export class UserRepository {
         updatedAt: Date.now(),
       },
     });
+
+    return {
+      ...newUser,
+      createdAt: Number(newUser.createdAt),
+      updatedAt: Number(newUser.updatedAt),
+    };
   }
 
   async deleteUser(id: string): Promise<boolean> {
