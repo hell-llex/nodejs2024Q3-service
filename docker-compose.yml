@@ -18,8 +18,8 @@ services:
       - ./tsconfig.build.json:/app/tsconfig.build.json
       - /app/node_modules
     environment:
-      # - DATABASE_URL=${DATABASE_URL}
-      - DATABASE_URL=postgresql://user:password@postgres:5432/home-library?schema=public
+      - DATABASE_URL=${DATABASE_URL}
+      # - DATABASE_URL=postgresql://user:password@postgres:5432/home-library?schema=public
     command: npm run start:dev
     depends_on:
       - postgres
