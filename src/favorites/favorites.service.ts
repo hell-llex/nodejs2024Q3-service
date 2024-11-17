@@ -1,5 +1,3 @@
-// src/favorites/favorites.service.ts
-
 import {
   Inject,
   Injectable,
@@ -28,63 +26,63 @@ export class FavoritesService {
     return await this.favoritesRepository.getAllFavorites();
   }
 
-  updateTrackFavorites(id: string): { message: string } {
-    const track = this.trackRepository.getTrackById(id);
+  async updateTrackFavorites(id: string): Promise<{ message: string }> {
+    const track = await this.trackRepository.getTrackById(id);
     if (!track) {
       throw new UnprocessableEntityException(
         `Favorites with id ${id} not found`,
       );
     }
-    return this.favoritesRepository.updateTrackFavorites(id);
+    return await this.favoritesRepository.updateTrackFavorites(id);
   }
 
-  deleteTrackFromFavorites(id: string): void {
-    const track = this.trackRepository.getTrackById(id);
+  async deleteTrackFromFavorites(id: string): Promise<void> {
+    const track = await this.trackRepository.getTrackById(id);
     if (!track) {
       throw new UnprocessableEntityException(
         `Favorites with id ${id} not found`,
       );
     }
-    this.favoritesRepository.deleteTrackFromFavorites(id);
+    await this.favoritesRepository.deleteTrackFromFavorites(id);
   }
 
-  updateArtistFavorites(id: string): { message: string } {
-    const artist = this.artistRepository.getArtistById(id);
+  async updateArtistFavorites(id: string): Promise<{ message: string }> {
+    const artist = await this.artistRepository.getArtistById(id);
     if (!artist) {
       throw new UnprocessableEntityException(
         `Favorites with id ${id} not found`,
       );
     }
-    return this.favoritesRepository.updateArtistFavorites(id);
+    return await this.favoritesRepository.updateArtistFavorites(id);
   }
 
-  deleteArtistFromFavorites(id: string): void {
-    const artist = this.artistRepository.getArtistById(id);
+  async deleteArtistFromFavorites(id: string): Promise<void> {
+    const artist = await this.artistRepository.getArtistById(id);
     if (!artist) {
       throw new UnprocessableEntityException(
         `Favorites with id ${id} not found`,
       );
     }
-    this.favoritesRepository.deleteArtistFromFavorites(id);
+    await this.favoritesRepository.deleteArtistFromFavorites(id);
   }
 
-  updateAlbumFavorites(id: string): { message: string } {
-    const album = this.albumRepository.getAlbumById(id);
+  async updateAlbumFavorites(id: string): Promise<{ message: string }> {
+    const album = await this.albumRepository.getAlbumById(id);
     if (!album) {
       throw new UnprocessableEntityException(
         `Favorites with id ${id} not found`,
       );
     }
-    return this.favoritesRepository.updateAlbumFavorites(id);
+    return await this.favoritesRepository.updateAlbumFavorites(id);
   }
 
-  deleteAlbumFromFavorites(id: string): void {
-    const album = this.albumRepository.getAlbumById(id);
+  async deleteAlbumFromFavorites(id: string): Promise<void> {
+    const album = await this.albumRepository.getAlbumById(id);
     if (!album) {
       throw new UnprocessableEntityException(
         `Favorites with id ${id} not found`,
       );
     }
-    this.favoritesRepository.deleteAlbumFromFavorites(id);
+    await this.favoritesRepository.deleteAlbumFromFavorites(id);
   }
 }

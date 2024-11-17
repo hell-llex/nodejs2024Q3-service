@@ -1,5 +1,3 @@
-// src/favorites/favorites.controller.ts
-
 import {
   Controller,
   Post,
@@ -26,7 +24,7 @@ export class FavoritesController {
 
   @Post('track/:id')
   @HttpCode(HttpStatus.CREATED)
-  updateTrackFavorites(
+  async updateTrackFavorites(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -35,13 +33,13 @@ export class FavoritesController {
       }),
     )
     id: string,
-  ): { message: string } {
-    return this.favoritesService.updateTrackFavorites(id);
+  ): Promise<{ message: string }> {
+    return await this.favoritesService.updateTrackFavorites(id);
   }
 
   @Delete('track/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteTrackFavorites(
+  async deleteTrackFavorites(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -50,13 +48,13 @@ export class FavoritesController {
       }),
     )
     id: string,
-  ): void {
-    this.favoritesService.deleteTrackFromFavorites(id);
+  ): Promise<void> {
+    await this.favoritesService.deleteTrackFromFavorites(id);
   }
 
   @Post('artist/:id')
   @HttpCode(HttpStatus.CREATED)
-  updateArtistFavorites(
+  async updateArtistFavorites(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -65,13 +63,13 @@ export class FavoritesController {
       }),
     )
     id: string,
-  ): { message: string } {
-    return this.favoritesService.updateArtistFavorites(id);
+  ): Promise<{ message: string }> {
+    return await this.favoritesService.updateArtistFavorites(id);
   }
 
   @Delete('artist/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteArtistFavorites(
+  async deleteArtistFavorites(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -80,13 +78,13 @@ export class FavoritesController {
       }),
     )
     id: string,
-  ): void {
-    this.favoritesService.deleteArtistFromFavorites(id);
+  ): Promise<void> {
+    await this.favoritesService.deleteArtistFromFavorites(id);
   }
 
   @Post('album/:id')
   @HttpCode(HttpStatus.CREATED)
-  updateAlbumFavorites(
+  async updateAlbumFavorites(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -95,13 +93,13 @@ export class FavoritesController {
       }),
     )
     id: string,
-  ): { message: string } {
-    return this.favoritesService.updateAlbumFavorites(id);
+  ): Promise<{ message: string }> {
+    return await this.favoritesService.updateAlbumFavorites(id);
   }
 
   @Delete('album/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteAlbumFavorites(
+  async deleteAlbumFavorites(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -110,7 +108,7 @@ export class FavoritesController {
       }),
     )
     id: string,
-  ): void {
-    this.favoritesService.deleteAlbumFromFavorites(id);
+  ): Promise<void> {
+    await this.favoritesService.deleteAlbumFromFavorites(id);
   }
 }
