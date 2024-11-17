@@ -1,7 +1,7 @@
 # Dockerfile для приложения
 
 # Базовый образ для разработки
-FROM node:18-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
