@@ -8,7 +8,7 @@ export class ArtistRepository {
   constructor(private prisma: PrismaService) {}
 
   async createArtist(name: string, grammy: boolean): Promise<Artist> {
-    return this.prisma.artist.create({
+    return await this.prisma.artist.create({
       data: {
         id: uuidv4(),
         name,
@@ -18,20 +18,20 @@ export class ArtistRepository {
   }
 
   async getArtistById(id: string): Promise<Artist | null> {
-    return this.prisma.artist.findUnique({
+    return await this.prisma.artist.findUnique({
       where: { id },
     });
   }
 
   async getAllArtists(): Promise<Artist[]> {
-    return this.prisma.artist.findMany();
+    return await this.prisma.artist.findMany();
   }
 
   async updateArtist(
     id: string,
     updatedData: Partial<Artist>,
   ): Promise<Artist> {
-    return this.prisma.artist.update({
+    return await this.prisma.artist.update({
       where: { id },
       data: updatedData,
     });

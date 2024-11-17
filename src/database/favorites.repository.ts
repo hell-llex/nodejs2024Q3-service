@@ -44,9 +44,9 @@ export class FavoritesRepository {
       .map((id) => this.albumRepository.getAlbumById(id))
       .filter((album) => album !== undefined) as unknown as Album[];
 
-    const tracks = this.favorites.tracks
+    const tracks = (await this.favorites.tracks)
       .map((id) => this.trackRepository.getTrackById(id))
-      .filter((track) => track !== undefined) as Track[];
+      .filter((track) => track !== undefined) as unknown as Track[];
 
     return {
       artists,

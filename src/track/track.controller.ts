@@ -1,5 +1,3 @@
-// src/track/track.controller.ts
-
 import {
   Controller,
   Post,
@@ -24,13 +22,13 @@ export class TrackController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  getAllTrack() {
-    return this.trackService.getAllTrack();
+  async getAllTrack() {
+    return await this.trackService.getAllTrack();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  getTrackById(
+  async getTrackById(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -39,36 +37,41 @@ export class TrackController {
       }),
     )
     id: string,
-  ): Track {
-    const track = this.trackService.getTrackById(id);
+  ): Promise<Track> {
+    const track = await this.trackService.getTrackById(id);
     if (!track) {
       throw new NotFoundException(`Track with id ${id} not found`);
     }
-    return this.trackService.getTrackById(id);
+    return await this.trackService.getTrackById(id);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createTrack(@Body() createTrackDto: CreateTrackDto): Promise<Track> {
     const { name, artistId, albumId, duration } = createTrackDto;
-    return this.trackService.createTrack(name, artistId, albumId, duration);
+    return await this.trackService.createTrack(
+      name,
+      artistId,
+      albumId,
+      duration,
+    );
   }
 
   @Put(':id')
-  updateTrack(
+  async updateTrack(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updateTrackDto: UpdateTrackDto,
   ) {
-    const track = this.trackService.getTrackById(id);
+    const track = await this.trackService.getTrackById(id);
     if (!track) {
       throw new NotFoundException(`Track with id ${id} not found`);
     }
-    return this.trackService.updateTrack(id, updateTrackDto);
+    return await this.trackService.updateTrack(id, updateTrackDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteTrack(
+  async deleteTrack(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -77,11 +80,11 @@ export class TrackController {
       }),
     )
     id: string,
-  ): void {
-    const track = this.trackService.getTrackById(id);
+  ): Promise<void> {
+    const track = await this.trackService.getTrackById(id);
     if (!track) {
       throw new NotFoundException(`Track with id ${id} not found`);
     }
-    this.trackService.deleteTrack(id);
+    await this.trackService.deleteTrack(id);
   }
 }

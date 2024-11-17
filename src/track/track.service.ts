@@ -1,5 +1,3 @@
-// src/tracks/tracks.service.ts
-
 import { Inject, Injectable } from '@nestjs/common';
 import { Track } from './interfaces/track.interface';
 import { TrackRepository } from '../database/track.repository';
@@ -14,30 +12,37 @@ export class TrackService {
     private readonly trackRepository: TrackRepository,
   ) {}
 
-  getAllTrack(): Track[] {
-    // console.log('TrackRepository instance:', this.trackRepository);
-    return this.trackRepository.getAllTrack();
+  async getAllTrack(): Promise<Track[]> {
+    return await this.trackRepository.getAllTrack();
   }
 
-  createTrack(
+  async createTrack(
     name: string,
     artistId: string,
     albumId: string,
     duration: number,
-  ): Track {
-    return this.trackRepository.createTrack(name, artistId, albumId, duration);
+  ): Promise<Track> {
+    return await this.trackRepository.createTrack(
+      name,
+      artistId,
+      albumId,
+      duration,
+    );
   }
 
-  getTrackById(id: string): Track | undefined {
-    return this.trackRepository.getTrackById(id);
+  async getTrackById(id: string): Promise<Track | undefined> {
+    return await this.trackRepository.getTrackById(id);
   }
 
-  updateTrack(id: string, updatedData: Partial<Track>): Track | undefined {
-    return this.trackRepository.updateTrack(id, updatedData);
+  async updateTrack(
+    id: string,
+    updatedData: Partial<Track>,
+  ): Promise<Track | undefined> {
+    return await this.trackRepository.updateTrack(id, updatedData);
   }
 
-  deleteTrack(id: string): boolean {
-    this.favoritesRepository.deleteTrackFromFavorites(id);
-    return this.trackRepository.deleteTrack(id);
+  async deleteTrack(id: string): Promise<boolean> {
+    await this.favoritesRepository.deleteTrackFromFavorites(id);
+    return await this.trackRepository.deleteTrack(id);
   }
 }
