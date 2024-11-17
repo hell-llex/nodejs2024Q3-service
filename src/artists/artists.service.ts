@@ -1,5 +1,3 @@
-// src/artists/artists.service.ts
-
 import { Inject, Injectable } from '@nestjs/common';
 import { Artist } from './interfaces/artist.interface';
 import { ArtistRepository } from '../database/artist.repository';
@@ -20,34 +18,37 @@ export class ArtistsService {
     private readonly albumRepository: AlbumRepository,
   ) {}
 
-  getAllArtists(): Artist[] {
-    return this.artistRepository.getAllArtists();
+  async getAllArtists(): Promise<Artist[]> {
+    return await this.artistRepository.getAllArtists();
   }
 
-  createArtist(name: string, grammy: boolean): Artist {
-    return this.artistRepository.createArtist(name, grammy);
+  async createArtist(name: string, grammy: boolean): Promise<Artist> {
+    return await this.artistRepository.createArtist(name, grammy);
   }
 
-  getArtistById(id: string): Artist | undefined {
-    return this.artistRepository.getArtistById(id);
+  async getArtistById(id: string): Promise<Artist | undefined> {
+    return await this.artistRepository.getArtistById(id);
   }
 
-  updateArtist(id: string, updatedData: Partial<Artist>): Artist | undefined {
-    return this.artistRepository.updateArtist(id, updatedData);
+  async updateArtist(
+    id: string,
+    updatedData: Partial<Artist>,
+  ): Promise<Artist | undefined> {
+    return await this.artistRepository.updateArtist(id, updatedData);
   }
 
   async deleteArtist(id: string): Promise<boolean> {
-    this.favoritesRepository.deleteArtistFromFavorites(id);
-    (await this.albumRepository.getAllAlbum()).forEach((album) => {
+    await this.favoritesRepository.deleteArtistFromFavorites(id);
+    (await this.albumRepository.getAllAlbum()).forEach(async (album) => {
       if (album.artistId && album.artistId === id) {
-        this.albumRepository.updateAlbum(album.id, { artistId: null });
+        await this.albumRepository.updateAlbum(album.id, { artistId: null });
       }
     });
-    this.trackRepository.getAllTrack().forEach((track) => {
+    (await this.trackRepository.getAllTrack()).forEach(async (track) => {
       if (track.artistId && track.artistId === id) {
-        this.trackRepository.updateTrack(track.id, { artistId: null });
+        await this.trackRepository.updateTrack(track.id, { artistId: null });
       }
     });
-    return this.artistRepository.deleteArtist(id);
+    return await this.artistRepository.deleteArtist(id);
   }
 }

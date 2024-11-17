@@ -1,44 +1,46 @@
-// src/database/artist.repository.ts
-
 import { Injectable } from '@nestjs/common';
 import { Artist } from '../artists/interfaces/artist.interface';
 import { v4 as uuidv4 } from 'uuid';
+import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class ArtistRepository {
-  private artists: Map<string, Artist> = new Map();
+  constructor(private prisma: PrismaService) {}
 
-  createArtist(name: string, grammy: boolean): Artist {
-    const newArtist: Artist = {
-      id: uuidv4(),
-      name,
-      grammy,
-    };
-    this.artists.set(newArtist.id, newArtist);
-    return newArtist;
+  async createArtist(name: string, grammy: boolean): Promise<Artist> {
+    return this.prisma.artist.create({
+      data: {
+        id: uuidv4(),
+        name,
+        grammy,
+      },
+    });
   }
 
-  getArtistById(id: string): Artist | undefined {
-    return this.artists.get(id);
+  async getArtistById(id: string): Promise<Artist | null> {
+    return this.prisma.artist.findUnique({
+      where: { id },
+    });
   }
 
-  getAllArtists(): Artist[] {
-    return Array.from(this.artists.values());
+  async getAllArtists(): Promise<Artist[]> {
+    return this.prisma.artist.findMany();
   }
 
-  updateArtist(id: string, updatedData: Partial<Artist>): Artist {
-    const existingArtist = this.artists.get(id);
-    if (!existingArtist) return undefined;
-
-    const updatedArtist = {
-      ...existingArtist,
-      ...updatedData,
-    };
-    this.artists.set(id, updatedArtist);
-    return updatedArtist;
+  async updateArtist(
+    id: string,
+    updatedData: Partial<Artist>,
+  ): Promise<Artist> {
+    return this.prisma.artist.update({
+      where: { id },
+      data: updatedData,
+    });
   }
 
-  deleteArtist(id: string): boolean {
-    return this.artists.delete(id);
+  async deleteArtist(id: string): Promise<boolean> {
+    const artist = await this.prisma.artist.delete({
+      where: { id },
+    });
+    return !!artist;
   }
 }

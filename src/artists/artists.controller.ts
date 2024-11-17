@@ -1,5 +1,3 @@
-// src/artists/artists.controller.ts
-
 import {
   Controller,
   Post,
@@ -24,13 +22,13 @@ export class ArtistsController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  getAllArtists() {
-    return this.artistsService.getAllArtists();
+  async getAllArtists() {
+    return await this.artistsService.getAllArtists();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  getArtistById(
+  async getArtistById(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -39,12 +37,12 @@ export class ArtistsController {
       }),
     )
     id: string,
-  ): Artist {
-    const artist = this.artistsService.getArtistById(id);
+  ): Promise<Artist> {
+    const artist = await this.artistsService.getArtistById(id);
     if (!artist) {
       throw new NotFoundException(`Artists with id ${id} not found`);
     }
-    return this.artistsService.getArtistById(id);
+    return await this.artistsService.getArtistById(id);
   }
 
   @Post()
@@ -53,24 +51,24 @@ export class ArtistsController {
     @Body() createArtistDto: CreateArtistDto,
   ): Promise<Artist> {
     const { name, grammy } = createArtistDto;
-    return this.artistsService.createArtist(name, grammy);
+    return await this.artistsService.createArtist(name, grammy);
   }
 
   @Put(':id')
-  updateArtist(
+  async updateArtist(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updateArtistDto: UpdateArtistDto,
   ) {
-    const artist = this.artistsService.getArtistById(id);
+    const artist = await this.artistsService.getArtistById(id);
     if (!artist) {
       throw new NotFoundException(`Artists with id ${id} not found`);
     }
-    return this.artistsService.updateArtist(id, updateArtistDto);
+    return await this.artistsService.updateArtist(id, updateArtistDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteArtist(
+  async deleteArtist(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -79,11 +77,11 @@ export class ArtistsController {
       }),
     )
     id: string,
-  ): void {
-    const artist = this.artistsService.getArtistById(id);
+  ): Promise<void> {
+    const artist = await this.artistsService.getArtistById(id);
     if (!artist) {
       throw new NotFoundException(`Artist with id ${id} not found`);
     }
-    this.artistsService.deleteArtist(id);
+    await this.artistsService.deleteArtist(id);
   }
 }

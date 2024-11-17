@@ -36,9 +36,9 @@ export class FavoritesRepository {
   };
 
   async getAllFavorites(): Promise<ResponseFavorites> {
-    const artists = this.favorites.artists
+    const artists = (await this.favorites.artists)
       .map((id) => this.artistRepository.getArtistById(id))
-      .filter((artist) => artist !== undefined) as Artist[];
+      .filter((artist) => artist !== undefined) as unknown as Artist[];
 
     const albums = (await this.favorites.albums)
       .map((id) => this.albumRepository.getAlbumById(id))
