@@ -1,0 +1,61 @@
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  app:
+    image: hellllex/nodejs2024q3-service-app
+    container_name: nodejs2024q3-service-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - ./prisma:/app/prisma
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+      - ./package-lock.json:/app/package-lock.json
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./tsconfig.build.json:/app/tsconfig.build.json
+      - /app/node_modules
+      - logs:/app/logs
+    environment:
+      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_NAME}?schema=public"
+    command: sh -c "npx prisma migrate dev && npm run start:dev"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: always
+
+  postgres:
+    image: hellllex/nodejs2024q3-service-postgres
+    container_name: nodejs2024q3-service-postgres
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_NAME}
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - pglogs:/var/log/postgresql
+    healthcheck:
+      test: pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_NAME}
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - app-network
+    restart: always
+
+volumes:
+  pgdata:
+  pglogs:
+  logs:
