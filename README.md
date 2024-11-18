@@ -29,7 +29,7 @@ This guide will help you set up and run the project locally.
 4. **Start the application**
 
    ```bash
-   docker-compose up --build
+   docker-compose up --build -d
    ```
     or
    ```bash
@@ -51,7 +51,7 @@ This guide will help you set up and run the project locally.
 
 ### Testing
 
-> **Note**: Make sure the application is running by executing `docker-compose up --build` before running any tests to ensure they work correctly.
+> **Note**: Make sure the application is running by executing `docker-compose up --build -d` before running any tests to ensure they work correctly.
 
 The project includes comprehensive test suites for:
 
