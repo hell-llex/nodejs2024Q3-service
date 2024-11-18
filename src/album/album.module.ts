@@ -1,5 +1,3 @@
-// src/album/artists.module.ts
-
 import { Module } from '@nestjs/common';
 import { AlbumController } from './album.controller';
 import { AlbumService } from './album.service';

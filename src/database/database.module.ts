@@ -30,18 +30,9 @@ import { PrismaService } from './prisma.service';
       provide: 'UserRepository',
       useClass: UserRepository,
     },
-    // AlbumRepository,
-    // TrackRepository,
-    // ArtistRepository,
-
-    // FavoritesRepository,
   ],
   exports: [
     PrismaService,
-    // TrackRepository,
-    // AlbumRepository,
-    // ArtistRepository,
-    // FavoritesRepository,
     'TrackRepository',
     'AlbumRepository',
     'ArtistRepository',

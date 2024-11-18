@@ -40,7 +40,6 @@ import { TrackService } from './track/track.service';
       provide: 'FavoritesRepository',
       useClass: FavoritesRepository,
     },
-    // FavoritesService,
   ],
 })
 export class AppModule {}

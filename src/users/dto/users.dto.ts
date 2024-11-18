@@ -1,4 +1,3 @@
-// src/users/dto/user-response.dto.ts
 import { Exclude, Expose } from 'class-transformer';
 import { User } from '../interfaces/user.interface';
 import { IsNotEmpty, IsString } from 'class-validator';
@@ -28,7 +27,6 @@ export class UserResponseDto {
     this.version = user.version;
     this.createdAt = user.createdAt;
     this.updatedAt = user.updatedAt;
-    // this.password = user.password;
   }
 }
 
