@@ -4,7 +4,8 @@ networks:
 
 services:
   app:
-    container_name: app
+    image: hellllex/nodejs2024q3-service-app
+    container_name: nodejs2024q3-service-app
     build:
       context: .
       dockerfile: Dockerfile
@@ -21,7 +22,7 @@ services:
       - logs:/app/logs
     environment:
       DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_NAME}?schema=public"
-    command: npm run start:dev
+    command: sh -c "npx prisma migrate dev && npm run start:dev"
     depends_on:
       postgres:
         condition: service_healthy
@@ -30,8 +31,8 @@ services:
     restart: always
 
   postgres:
-    image: postgres:16-alpine
-    container_name: postgres
+    image: hellllex/nodejs2024q3-service-postgres
+    container_name: nodejs2024q3-service-postgres
     build:
       context: .
       dockerfile: Dockerfile.postgres

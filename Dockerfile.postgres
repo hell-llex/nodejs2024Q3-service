@@ -1,15 +1,11 @@
 FROM postgres:17.1-alpine
 
-# ENV POSTGRES_USER=${POSTGRES_USER} \
-#   POSTGRES_PASSWORD=${POSTGRES_PASSWORD} \
-#   POSTGRES_DB=${POSTGRES_NAME}
+RUN mkdir -p /var/lib/postgresql/data && \
+  chown -R postgres:postgres /var/lib/postgresql/data && \
+  chmod 700 /var/lib/postgresql/data
 
-# RUN mkdir -p /var/lib/postgresql/data && \
-#   chown -R postgres:postgres /var/lib/postgresql/data && \
-#   chmod 700 /var/lib/postgresql/data
+USER ${POSTGRES_USER}
 
-USER postgres
-
-EXPOSE 5432
+EXPOSE ${POSTGRES_PORT}
 
 CMD ["postgres"]
