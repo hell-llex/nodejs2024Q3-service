@@ -1,7 +1,5 @@
-# Dockerfile для приложения
-
-# Базовый образ для разработки
-FROM node:22-alpine
+FROM --platform=linux/amd64 node:18.14-alpine as builder
+# FROM node:22.1-alpine as builder
 
 WORKDIR /app
 
@@ -9,22 +7,30 @@ RUN npm set registry https://registry.npmjs.org/ && \
   npm config set fetch-retry-mintimeout 20000 && \
   npm config set fetch-retry-maxtimeout 120000
 
-# Установка необходимых инструментов
-RUN apk add --no-cache python3 build-base
-
-# Установка зависимостей
 COPY package*.json ./
 RUN npm ci
 
-# Копируем исходный код
-COPY . .
-
-# Генерация Prisma Client
 COPY prisma ./prisma/
 RUN npx prisma generate
 
-# Экспонируем порт
-EXPOSE 4000
+COPY . .
+RUN npm run build
 
-# Команда для запуска
+FROM node:18.14-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/prisma ./prisma
+# COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/doc ./doc
+
+COPY package*.json ./
+
+ENV PORT=4000
+ENV NODE_ENV=development
+ENV CHOKIDAR_USEPOLLING=true
+
+EXPOSE ${PORT}
+
 CMD ["npm", "run", "start:dev"]

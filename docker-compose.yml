@@ -18,8 +18,8 @@ services:
       - ./tsconfig.json:/app/tsconfig.json
       - ./tsconfig.build.json:/app/tsconfig.build.json
       - /app/node_modules
+      - logs:/app/logs
     environment:
-      # - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_NAME}?schema=public
       DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_NAME}?schema=public"
     command: npm run start:dev
     depends_on:
@@ -43,6 +43,7 @@ services:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - pglogs:/var/log/postgresql
     healthcheck:
       test: pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_NAME}
       interval: 5s
@@ -55,3 +56,5 @@ services:
 
 volumes:
   pgdata:
+  pglogs:
+  logs:
