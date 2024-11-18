@@ -149,4 +149,8 @@ npx prisma generate
 
 ## Готово! 
 Приложение доступно по адресу: [http://localhost:4000/doc](http://localhost:4000/doc)
+
+## Проверка уязвимостей:
+```bash
+docker scout cves nodejs2024q3-service-app
 ```
