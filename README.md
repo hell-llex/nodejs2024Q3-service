@@ -18,23 +18,40 @@ This guide will help you set up and run the project locally.
    git clone https://github.com/hell-llex/nodejs2024Q3-service.git
    ```
 
-2. **Install dependencies**
+2. **Create `.env` file with settings from `.env.example`**
+
+3. **Install dependencies (to run tests)**
 
    ```bash
    npm install
    ```
 
-3. **Start the application**
+4. **Start the application**
 
    ```bash
-   npm start
+   docker-compose up --build
+   ```
+    or
+   ```bash
+   npm run docker:start
+   ```
+    > **Note**: By default, the server will start on port 4000. You can access the OpenAPI documentation at [http://localhost:4000/doc/](http://localhost:4000/doc/).
+
+5. **If migrations are not automatically applied then create and apply migrations**
+
+   ```bash
+   docker exec app npx prisma migrate dev
    ```
 
-   By default, the server will start on port 4000. You can access the OpenAPI documentation at [http://localhost:4000/doc/](http://localhost:4000/doc/).
+6. **Vulnerability testing**
+
+   ```bash
+   npm run check:vulner
+   ```
 
 ### Testing
 
-> **Note**: Make sure the application is running by executing `npm start` before running any tests to ensure they work correctly.
+> **Note**: Make sure the application is running by executing `docker-compose up --build` before running any tests to ensure they work correctly.
 
 The project includes comprehensive test suites for:
 
@@ -109,48 +126,3 @@ The API includes endpoints for managing:
 - Albums
 - Tracks
 - Favorites
-
-
-# Инструкция по запуску проекта
-
-## 1. Клонируем репозиторий:
-```bash
-git clone https://github.com/hell-llex/nodejs2024Q3-service.git
-```
-
-## 2. Переходим в директорию проекта:
-```bash
-cd nodejs2024Q3-service
-```
-
-## 3. Устанавливаем зависимости:
-```bash
-npm install
-```
-
-## 4. Создаем `.env` файл с настройками из `.env.example`
-
-## 5. Запускаем Docker-контейнеры:
-```bash
-docker-compose up -d
-```
-
-## 6. Создаем и применяем миграции:
-```bash
-docker exec app npx prisma migrate dev
-```
-
-<!-- ## 7. Генерируем Prisma-клиент:
-```bash
-npx prisma generate
-``` -->
-
----
-
-## Готово! 
-Приложение доступно по адресу: [http://localhost:4000/doc](http://localhost:4000/doc)
-
-## Проверка уязвимостей:
-```bash
-docker scout cves nodejs2024q3-service-app
-```

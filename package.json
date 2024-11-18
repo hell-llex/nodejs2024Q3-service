@@ -6,6 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "docker:start": "docker-compose up --build",
+    "check:vulner": "npm audit && docker scout quickview hellllex/nodejs2024q3-service-postgres && docker scout quickview hellllex/nodejs2024q3-service-app",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
