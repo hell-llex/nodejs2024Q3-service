@@ -11,21 +11,25 @@ import {
   ParseUUIDPipe,
   NotFoundException,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { CreateAlbumDto, UpdateAlbumDto } from './dto/album.dto';
 import { Album } from './interfaces/album.interface';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('album')
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   @HttpCode(HttpStatus.OK)
   async getAllAlbum() {
     return await this.albumService.getAllAlbum();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getAlbumById(
@@ -45,6 +49,7 @@ export class AlbumController {
     return await this.albumService.getAlbumById(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createAlbum(@Body() createAlbumDto: CreateAlbumDto): Promise<Album> {
@@ -52,6 +57,7 @@ export class AlbumController {
     return await this.albumService.createAlbum(name, artistId, year);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   async updateAlbum(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -64,6 +70,7 @@ export class AlbumController {
     return await this.albumService.updateAlbum(id, updateAlbumDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteAlbum(
