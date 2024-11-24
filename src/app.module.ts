@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
-import { UsersModule } from './users/users.module';
+import { UserModule } from './user/user.module';
 import { ArtistsModule } from './artists/artists.module';
 import { TrackModule } from './track/track.module';
 import { AlbumModule } from './album/album.module';
@@ -10,18 +10,28 @@ import { AlbumService } from './album/album.service';
 import { ArtistsService } from './artists/artists.service';
 import { FavoritesRepository } from './database/favorites.repository';
 import { TrackService } from './track/track.service';
+import { AuthService } from './auth/auth.service';
+import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    UsersModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET_KEY || 'SECRET',
+      signOptions: {
+        expiresIn: process.env.TOKEN_EXPIRE_TIME || '24h',
+      },
+    }),
+    UserModule,
     TrackModule,
     ArtistsModule,
     AlbumModule,
     DatabaseModule,
     FavoritesModule,
+    AuthModule,
   ],
   providers: [
     {
@@ -39,6 +49,10 @@ import { TrackService } from './track/track.service';
     {
       provide: 'FavoritesRepository',
       useClass: FavoritesRepository,
+    },
+    {
+      provide: 'AuthService',
+      useClass: AuthService,
     },
   ],
 })
