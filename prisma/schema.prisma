@@ -14,6 +14,19 @@ model User {
   version   Int  @default(1)
   createdAt BigInt
   updatedAt BigInt
+
+  refreshTokens RefreshToken[]
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt BigInt
+  createdAt BigInt
+
+  @@map("refresh_tokens")
 }
 
 model Artist {
