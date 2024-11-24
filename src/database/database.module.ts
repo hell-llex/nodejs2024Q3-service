@@ -5,6 +5,7 @@ import { TrackRepository } from './track.repository';
 import { AlbumRepository } from './album.repository';
 import { FavoritesRepository } from './favorites.repository';
 import { PrismaService } from './prisma.service';
+import { RefreshTokenRepository } from './refresh-token.repository';
 
 @Global()
 @Module({
@@ -30,6 +31,10 @@ import { PrismaService } from './prisma.service';
       provide: 'UserRepository',
       useClass: UserRepository,
     },
+    {
+      provide: 'RefreshTokenRepository',
+      useClass: RefreshTokenRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -38,6 +43,7 @@ import { PrismaService } from './prisma.service';
     'ArtistRepository',
     'FavoritesRepository',
     'UserRepository',
+    'RefreshTokenRepository',
   ],
 })
 export class DatabaseModule {}
