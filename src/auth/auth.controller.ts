@@ -5,11 +5,13 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  UnauthorizedException,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../user/dto/user.dto';
 import { AuthService } from './auth.service';
+import { RefreshTokenDto } from './refresh-token.dto';
 
 @ApiTags('Authorization')
 @Controller('auth')
@@ -18,7 +20,31 @@ export class AuthController {
 
   @Post('/login')
   @HttpCode(HttpStatus.OK)
-  login(@Body() userDto: CreateUserDto) {
+  login(
+    @Body(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: false,
+        dismissDefaultMessages: true,
+        exceptionFactory: (errors) => {
+          const messages = errors.map((error) => {
+            if (error.property === 'login' || error.property === 'password') {
+              if (!error.value) {
+                return `${error.property} is required`;
+              }
+              if (typeof error.value !== 'string') {
+                return `${error.property} must be a string`;
+              }
+            }
+            return 'Invalid login or password format for user';
+          });
+          throw new BadRequestException(messages[0]);
+        },
+      }),
+    )
+    userDto: CreateUserDto,
+  ) {
     return this.authService.login(userDto);
   }
 
@@ -26,10 +52,25 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   async registration(
     @Body(
-      'userDto',
       new ValidationPipe({
-        exceptionFactory: () =>
-          new BadRequestException('Invalid login or password format for user'),
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: false,
+        dismissDefaultMessages: true,
+        exceptionFactory: (errors) => {
+          const messages = errors.map((error) => {
+            if (error.property === 'login' || error.property === 'password') {
+              if (!error.value) {
+                return `${error.property} is required`;
+              }
+              if (typeof error.value !== 'string') {
+                return `${error.property} must be a string`;
+              }
+            }
+            return 'Invalid login or password format for user';
+          });
+          throw new BadRequestException(messages[0]);
+        },
       }),
     )
     userDto: CreateUserDto,
@@ -37,9 +78,13 @@ export class AuthController {
     return await this.authService.registration(userDto);
   }
 
-  // @Post('/refresh')
-  // @HttpCode(HttpStatus.OK)
-  // async refresh(@Body() userDto: CreateUserDto) {
-  //   return await this.authService.refresh(userDto);
-  // }
+  @Post('/refresh')
+  @HttpCode(HttpStatus.OK)
+  async refresh(@Body() refreshTokenDto: RefreshTokenDto) {
+    const { refreshToken } = refreshTokenDto;
+    if (!refreshToken) {
+      throw new UnauthorizedException('Invalid refresh token for user');
+    }
+    return this.authService.refresh(refreshToken);
+  }
 }
