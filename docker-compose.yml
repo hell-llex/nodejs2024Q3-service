@@ -55,7 +55,28 @@ services:
       - app-network
     restart: always
 
+  pgadmin: # TODO Delete this block
+    container_name: pgadmin
+    image: dpage/pgadmin4:7.2
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+    networks:
+      - app-network
+
 volumes:
   pgdata:
   pglogs:
   logs:
+  pgadmin-data: # TODO Delete this line

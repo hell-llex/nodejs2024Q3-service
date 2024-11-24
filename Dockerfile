@@ -19,7 +19,7 @@ RUN npx prisma generate
 COPY . .
 RUN npm run build
 
-FROM node:22.1-alpine
+FROM --platform=linux/amd64 node:22.1-alpine
 
 WORKDIR /app
 
