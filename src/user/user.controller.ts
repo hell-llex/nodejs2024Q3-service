@@ -12,22 +12,26 @@ import {
   NotFoundException,
   BadRequestException,
   ForbiddenException,
+  UseGuards,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto, UpdateUserDto, UserResponseDto } from './dto/users.dto';
+import { UserService } from './user.service';
+import { CreateUserDto, UpdateUserDto, UserResponseDto } from './dto/user.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('user')
-export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+export class UserController {
+  constructor(private readonly userService: UserService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   @HttpCode(HttpStatus.OK)
-  async getAllUsers(): Promise<UserResponseDto[]> {
-    return (await this.usersService.getAllUsers()).map(
+  async getAllUser(): Promise<UserResponseDto[]> {
+    return (await this.userService.getAllUser()).map(
       (user) => new UserResponseDto(user),
     );
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getUserById(
@@ -40,23 +44,25 @@ export class UsersController {
     )
     id: string,
   ): Promise<UserResponseDto> {
-    const user = await this.usersService.getUserById(id);
+    const user = await this.userService.getUserById(id);
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
     return new UserResponseDto(user);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createUser(
     @Body() createUserDto: CreateUserDto,
   ): Promise<UserResponseDto> {
     const { password, login } = createUserDto;
-    const newUser = await this.usersService.createUser(login, password);
+    const newUser = await this.userService.createUser(login, password);
     return new UserResponseDto(newUser);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   async updateUser(
@@ -64,19 +70,20 @@ export class UsersController {
     @Body() updatePasswordDto: UpdateUserDto,
   ): Promise<UserResponseDto> {
     const { oldPassword, newPassword } = updatePasswordDto;
-    const user = await this.usersService.getUserById(id);
+    const user = await this.userService.getUserById(id);
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
     if (user.password !== oldPassword) {
       throw new ForbiddenException('Incorrect old password');
     }
-    const updatedUser = await this.usersService.updateUser(id, {
+    const updatedUser = await this.userService.updateUser(id, {
       password: newPassword,
     });
     return new UserResponseDto(updatedUser);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteUser(
@@ -89,10 +96,10 @@ export class UsersController {
     )
     id: string,
   ): Promise<void> {
-    const user = await this.usersService.getUserById(id);
+    const user = await this.userService.getUserById(id);
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
-    await this.usersService.deleteUser(id);
+    await this.userService.deleteUser(id);
   }
 }

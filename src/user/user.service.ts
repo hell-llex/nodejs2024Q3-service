@@ -3,13 +3,13 @@ import { User } from './interfaces/user.interface';
 import { UserRepository } from '../database/user.repository';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(
     @Inject('UserRepository')
     private readonly userRepository: UserRepository,
   ) {}
 
-  async getAllUsers(): Promise<User[]> {
+  async getAllUser(): Promise<User[]> {
     return await this.userRepository.getAllUsers();
   }
 
@@ -31,4 +31,8 @@ export class UsersService {
   async deleteUser(id: string): Promise<boolean> {
     return await this.userRepository.deleteUser(id);
   }
+
+  // async getUserByLogin(login: string): Promise<User | undefined> {
+  //   return await this.userRepository.getUserByLogin(login);
+  // }
 }

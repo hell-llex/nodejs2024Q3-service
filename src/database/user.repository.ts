@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { User } from '../users/interfaces/user.interface';
+import { User } from '../user/interfaces/user.interface';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -70,5 +70,17 @@ export class UserRepository {
       where: { id },
     });
     return !!user;
+  }
+
+  async getUserByLogin(login: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { login },
+    });
+    if (user === null) return null;
+    return {
+      ...user,
+      createdAt: Number(user.createdAt),
+      updatedAt: Number(user.updatedAt),
+    };
   }
 }
