@@ -13,18 +13,21 @@ import { TrackService } from './track/track.service';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+
+const jwtConfig = {
+  secret: new ConfigService().get<string>('JWT_SECRET_KEY', 'SECRET'),
+  signOptions: {
+    expiresIn: new ConfigService().get<string>('TOKEN_EXPIRE_TIME', '1h'),
+  },
+};
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET_KEY || 'SECRET',
-      signOptions: {
-        expiresIn: process.env.TOKEN_EXPIRE_TIME || '24h',
-      },
-    }),
+    JwtModule.register(jwtConfig),
     UserModule,
     TrackModule,
     ArtistsModule,
