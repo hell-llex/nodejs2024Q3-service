@@ -1,4 +1,3 @@
-import { Module } from '@nestjs/common';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
@@ -14,6 +13,11 @@ import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
+import { RequestLoggerMiddleware } from './request-logger.middleware';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './http-exception.filter';
+import { LoggingModule } from './logging/logging.module';
 
 const jwtConfig = {
   secret: new ConfigService().get<string>('JWT_SECRET_KEY', 'SECRET'),
@@ -35,6 +39,7 @@ const jwtConfig = {
     DatabaseModule,
     FavoritesModule,
     AuthModule,
+    LoggingModule,
   ],
   providers: [
     {
@@ -57,6 +62,14 @@ const jwtConfig = {
       provide: 'AuthService',
       useClass: AuthService,
     },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
   ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestLoggerMiddleware).forRoutes('*');
+  }
+}
