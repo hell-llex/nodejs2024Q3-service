@@ -40,7 +40,6 @@ export class RefreshTokenRepository {
   }
 
   async findRefreshToken(token: string) {
-    console.log('token :>> ', token);
     return await this.prisma.refreshToken.findUnique({
       where: {
         token,
