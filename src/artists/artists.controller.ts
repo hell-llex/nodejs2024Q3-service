@@ -11,21 +11,25 @@ import {
   ParseUUIDPipe,
   NotFoundException,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { ArtistsService } from './artists.service';
 import { CreateArtistDto, UpdateArtistDto } from './dto/artists.dto';
 import { Artist } from './interfaces/artist.interface';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('artist')
 export class ArtistsController {
   constructor(private readonly artistsService: ArtistsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   @HttpCode(HttpStatus.OK)
   async getAllArtists() {
     return await this.artistsService.getAllArtists();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getArtistById(
@@ -45,6 +49,7 @@ export class ArtistsController {
     return await this.artistsService.getArtistById(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createArtist(
@@ -54,6 +59,7 @@ export class ArtistsController {
     return await this.artistsService.createArtist(name, grammy);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   async updateArtist(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -66,6 +72,7 @@ export class ArtistsController {
     return await this.artistsService.updateArtist(id, updateArtistDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteArtist(
