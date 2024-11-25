@@ -31,8 +31,4 @@ export class UserService {
   async deleteUser(id: string): Promise<boolean> {
     return await this.userRepository.deleteUser(id);
   }
-
-  // async getUserByLogin(login: string): Promise<User | undefined> {
-  //   return await this.userRepository.getUserByLogin(login);
-  // }
 }
