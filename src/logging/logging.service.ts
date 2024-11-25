@@ -30,7 +30,11 @@ export class LoggingService {
   }
 
   private initializeLogFile() {
-    const logsDir = path.join(process.cwd(), 'logs');
+    // const logsDir = path.join(process.cwd(), 'logs');
+    // Добавляем проверку на Docker окружение
+    const baseDir = process.env.NODE_ENV === 'production' ? '.' : process.cwd();
+    const logsDir = path.join(baseDir, 'logs');
+
     if (!existsSync(logsDir)) {
       mkdirSync(logsDir);
     }

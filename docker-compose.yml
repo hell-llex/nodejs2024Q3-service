@@ -6,6 +6,8 @@ services:
   app:
     image: hellllex/nodejs2024q3-service-app
     container_name: nodejs2024q3-service-app
+    env_file:
+      - .env
     build:
       context: .
       dockerfile: Dockerfile
@@ -19,7 +21,7 @@ services:
       - ./tsconfig.json:/app/tsconfig.json
       - ./tsconfig.build.json:/app/tsconfig.build.json
       - /app/node_modules
-      - logs:/app/logs
+      - ./logs:/app/logs
     environment:
       DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_NAME}?schema=public"
     command: sh -c "npx prisma migrate dev && npm run start:dev"
@@ -78,5 +80,4 @@ services:
 volumes:
   pgdata:
   pglogs:
-  logs:
   pgadmin-data: # TODO Delete this line
