@@ -1,13 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Track } from './interfaces/track.interface';
 import { TrackRepository } from '../database/track.repository';
-import { FavoritesRepository } from '../database/favorites.repository';
 
 @Injectable()
 export class TrackService {
   constructor(
-    @Inject('FavoritesRepository')
-    private readonly favoritesRepository: FavoritesRepository,
     @Inject('TrackRepository')
     private readonly trackRepository: TrackRepository,
   ) {}
@@ -42,7 +39,6 @@ export class TrackService {
   }
 
   async deleteTrack(id: string): Promise<boolean> {
-    await this.favoritesRepository.deleteTrackFromFavorites(id);
     return await this.trackRepository.deleteTrack(id);
   }
 }

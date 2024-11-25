@@ -1,16 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Album } from './interfaces/album.interface';
 import { AlbumRepository } from '../database/album.repository';
-import { TrackRepository } from '../database/track.repository';
-import { FavoritesRepository } from '../database/favorites.repository';
 
 @Injectable()
 export class AlbumService {
   constructor(
-    @Inject('FavoritesRepository')
-    private readonly favoritesRepository: FavoritesRepository,
-    @Inject('TrackRepository')
-    private readonly trackRepository: TrackRepository,
     @Inject('AlbumRepository')
     private readonly albumRepository: AlbumRepository,
   ) {}
@@ -39,13 +33,6 @@ export class AlbumService {
   }
 
   async deleteAlbum(id: string): Promise<boolean> {
-    await this.favoritesRepository.deleteAlbumFromFavorites(id);
-    const tracks = await this.trackRepository.getAllTrack();
-    tracks.forEach(async (track) => {
-      if (track.albumId && track.albumId === id) {
-        await this.trackRepository.updateTrack(track.id, { albumId: null });
-      }
-    });
     return await this.albumRepository.deleteAlbum(id);
   }
 }

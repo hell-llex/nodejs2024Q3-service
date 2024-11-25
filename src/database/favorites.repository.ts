@@ -7,58 +7,59 @@ export class FavoritesRepository {
   constructor(private prisma: PrismaService) {}
 
   async getAllFavorites(): Promise<ResponseFavorites> {
-    const favorites = await this.prisma.favorites.findFirst();
-
-    const artists = await this.prisma.artist.findMany({
-      where: {
-        id: {
-          in: favorites?.artists || [],
+    const favorites = await this.prisma.favorites.findFirst({
+      include: {
+        artists: {
+          include: {
+            artist: true,
+          },
         },
-      },
-    });
-
-    const albums = await this.prisma.album.findMany({
-      where: {
-        id: {
-          in: favorites?.albums || [],
+        albums: {
+          include: {
+            album: true,
+          },
         },
-      },
-    });
-
-    const tracks = await this.prisma.track.findMany({
-      where: {
-        id: {
-          in: favorites?.tracks || [],
+        tracks: {
+          include: {
+            track: true,
+          },
         },
       },
     });
 
     return {
-      artists,
-      albums,
-      tracks,
+      artists: favorites?.artists.map((fa) => fa.artist) || [],
+      albums: favorites?.albums.map((fa) => fa.album) || [],
+      tracks: favorites?.tracks.map((ft) => ft.track) || [],
     };
   }
 
   async updateArtistFavorites(artistId: string): Promise<{ message: string }> {
-    const favorites = await this.prisma.favorites.findFirst();
+    let favorites = await this.prisma.favorites.findFirst();
 
     if (!favorites) {
-      await this.prisma.favorites.create({
+      favorites = await this.prisma.favorites.create({
         data: {
-          artists: [artistId],
-          albums: [],
-          tracks: [],
+          artists: {
+            create: [{ artistId }],
+          },
         },
       });
       return { message: 'Artist successfully added to favorites' };
     }
 
-    if (!favorites.artists.includes(artistId)) {
-      await this.prisma.favorites.update({
-        where: { id: favorites.id },
+    const existingFavorite = await this.prisma.favoritesArtists.findFirst({
+      where: {
+        favoriteId: favorites.id,
+        artistId: artistId,
+      },
+    });
+
+    if (!existingFavorite) {
+      await this.prisma.favoritesArtists.create({
         data: {
-          artists: [...favorites.artists, artistId],
+          favoriteId: favorites.id,
+          artistId: artistId,
         },
       });
       return { message: 'Artist successfully added to favorites' };
@@ -68,24 +69,31 @@ export class FavoritesRepository {
   }
 
   async updateAlbumFavorites(albumId: string): Promise<{ message: string }> {
-    const favorites = await this.prisma.favorites.findFirst();
+    let favorites = await this.prisma.favorites.findFirst();
 
     if (!favorites) {
-      await this.prisma.favorites.create({
+      favorites = await this.prisma.favorites.create({
         data: {
-          artists: [],
-          albums: [albumId],
-          tracks: [],
+          albums: {
+            create: [{ albumId }],
+          },
         },
       });
       return { message: 'Album successfully added to favorites' };
     }
 
-    if (!favorites.albums.includes(albumId)) {
-      await this.prisma.favorites.update({
-        where: { id: favorites.id },
+    const existingFavorite = await this.prisma.favoritesAlbums.findFirst({
+      where: {
+        favoriteId: favorites.id,
+        albumId: albumId,
+      },
+    });
+
+    if (!existingFavorite) {
+      await this.prisma.favoritesAlbums.create({
         data: {
-          albums: [...favorites.albums, albumId],
+          favoriteId: favorites.id,
+          albumId: albumId,
         },
       });
       return { message: 'Album successfully added to favorites' };
@@ -95,24 +103,31 @@ export class FavoritesRepository {
   }
 
   async updateTrackFavorites(trackId: string): Promise<{ message: string }> {
-    const favorites = await this.prisma.favorites.findFirst();
+    let favorites = await this.prisma.favorites.findFirst();
 
     if (!favorites) {
-      await this.prisma.favorites.create({
+      favorites = await this.prisma.favorites.create({
         data: {
-          artists: [],
-          albums: [],
-          tracks: [trackId],
+          tracks: {
+            create: [{ trackId }],
+          },
         },
       });
       return { message: 'Track successfully added to favorites' };
     }
 
-    if (!favorites.tracks.includes(trackId)) {
-      await this.prisma.favorites.update({
-        where: { id: favorites.id },
+    const existingFavorite = await this.prisma.favoritesTracks.findFirst({
+      where: {
+        favoriteId: favorites.id,
+        trackId: trackId,
+      },
+    });
+
+    if (!existingFavorite) {
+      await this.prisma.favoritesTracks.create({
         data: {
-          tracks: [...favorites.tracks, trackId],
+          favoriteId: favorites.id,
+          trackId: trackId,
         },
       });
       return { message: 'Track successfully added to favorites' };
@@ -124,10 +139,10 @@ export class FavoritesRepository {
   async deleteArtistFromFavorites(artistId: string): Promise<void> {
     const favorites = await this.prisma.favorites.findFirst();
     if (favorites) {
-      await this.prisma.favorites.update({
-        where: { id: favorites.id },
-        data: {
-          artists: favorites.artists.filter((id) => id !== artistId),
+      await this.prisma.favoritesArtists.deleteMany({
+        where: {
+          favoriteId: favorites.id,
+          artistId: artistId,
         },
       });
     }
@@ -136,10 +151,10 @@ export class FavoritesRepository {
   async deleteAlbumFromFavorites(albumId: string): Promise<void> {
     const favorites = await this.prisma.favorites.findFirst();
     if (favorites) {
-      await this.prisma.favorites.update({
-        where: { id: favorites.id },
-        data: {
-          albums: favorites.albums.filter((id) => id !== albumId),
+      await this.prisma.favoritesAlbums.deleteMany({
+        where: {
+          favoriteId: favorites.id,
+          albumId: albumId,
         },
       });
     }
@@ -148,10 +163,10 @@ export class FavoritesRepository {
   async deleteTrackFromFavorites(trackId: string): Promise<void> {
     const favorites = await this.prisma.favorites.findFirst();
     if (favorites) {
-      await this.prisma.favorites.update({
-        where: { id: favorites.id },
-        data: {
-          tracks: favorites.tracks.filter((id) => id !== trackId),
+      await this.prisma.favoritesTracks.deleteMany({
+        where: {
+          favoriteId: favorites.id,
+          trackId: trackId,
         },
       });
     }
