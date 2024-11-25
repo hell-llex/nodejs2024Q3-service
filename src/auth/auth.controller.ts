@@ -6,12 +6,14 @@ import {
   HttpStatus,
   Post,
   UnauthorizedException,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../user/dto/user.dto';
 import { AuthService } from './auth.service';
 import { RefreshTokenDto } from './refresh-token.dto';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @ApiTags('Authorization')
 @Controller('auth')
@@ -78,6 +80,7 @@ export class AuthController {
     return await this.authService.registration(userDto);
   }
 
+  // @UseGuards(JwtAuthGuard)
   @Post('/refresh')
   @HttpCode(HttpStatus.OK)
   async refresh(@Body() refreshTokenDto: RefreshTokenDto) {
