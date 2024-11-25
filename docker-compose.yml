@@ -57,7 +57,7 @@ services:
       - app-network
     restart: always
 
-  pgadmin: # TODO Delete this block
+  pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4:7.2
     environment:
@@ -80,4 +80,4 @@ services:
 volumes:
   pgdata:
   pglogs:
-  pgadmin-data: # TODO Delete this line
+  pgadmin-data:
